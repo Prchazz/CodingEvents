@@ -10,15 +10,13 @@ namespace CodingEvents.Controllers
 {
     public class EventsController : Controller
     {
-        static private List<string> Events = new List<string>();
+         
+        static private Dictionary<string, string> Events = new Dictionary<string, string>();
         // GET: /<controller>/
         //[HttpGet]
         public IActionResult Index()
         {
             
-            //Events.Add("Strange Loop");
-            //Events.Add("Grace hopper");
-            //Events.Add("Code with Pride");
             ViewBag.events = Events;
             return View();
         }
@@ -28,9 +26,9 @@ namespace CodingEvents.Controllers
             return View();
         }
         [HttpPost("/Events/Add")]
-        public IActionResult NewEvent(string name)
+        public IActionResult NewEvent(string name, string discription)
         {
-            Events.Add(name);
+            Events.Add(name, discription);
             return Redirect("/Events");
         }
     }
