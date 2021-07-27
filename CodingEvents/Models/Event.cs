@@ -7,6 +7,7 @@ namespace CodingEvents.Models
         public string Description { get; set; }
         public int Id { get;}
         private static int nextId = 1;
+        public string ContactEmail { get; set; }
 
         public Event()
         {
@@ -14,10 +15,11 @@ namespace CodingEvents.Models
             nextId++;
         }
 
-        public Event(string name, string description) : this()
+        public Event(string name, string description, string contactEmail) : this()
         {
             Name = name;
             Description = description;
+            ContactEmail = contactEmail;
             
         }
 

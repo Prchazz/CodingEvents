@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CodingEvents.Data;
 using CodingEvents.Models;
+using CodingEvents.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -18,20 +19,36 @@ namespace CodingEvents.Controllers
         //[HttpGet]
         public IActionResult Index()
         {
-
-            ViewBag.events = EventData.GetAll();
-            return View();
+            List<Event> events = new List<Event>(EventData.GetAll());
+            
+            return View(events);
         }
         [HttpGet]
         public IActionResult Add()
         {
-            return View();
+            AddEventViewModel addEventViewModel = new AddEventViewModel();
+            return View(addEventViewModel);
         }
-        [HttpPost("/Events/Add")]
-        public IActionResult NewEvent(Event newEvent)
+
+        [HttpPost]
+        public IActionResult Add(AddEventViewModel addEventViewModel)
         {
-            EventData.Add(newEvent);
-            return Redirect("/Events");
+            if (ModelState.IsValid)
+            {
+                Event newEvent = new Event
+                {
+                    Name = addEventViewModel.Name,
+                    Description = addEventViewModel.Description,
+                    ContactEmail = addEventViewModel.ContactEmail
+
+                };
+                EventData.Add(newEvent);
+                return Redirect("/Events");
+
+            }
+
+            return View(addEventViewModel);
+            
         }
 
         public IActionResult Delete()
@@ -61,12 +78,13 @@ namespace CodingEvents.Controllers
         }
 
         [HttpPost("/Events/Edit")]
-        public IActionResult SubmitEditEventForm(int eventId, string name, string description)
+        public IActionResult SubmitEditEventForm(int eventId, string name, string description, string contactEmail)
         {
             //    //controller code here
             Event EditEvent = EventData.GetById(eventId);
             EditEvent.Name = name;
             EditEvent.Description = description;
+            EditEvent.ContactEmail = contactEmail;
             return Redirect("/Events");
         }
     }
